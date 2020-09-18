@@ -208,7 +208,7 @@ def blade_moments(blade_matrix,flap_offset,flap_raw,edge_offset,edge_raw):
 
 ################ Fatigue functions
 
-def damage_equivalent_load(data_signal, m, bin_num=100, data_length=600):
+def damage_equivalent_load(data_signal, m, bin_num=100, data_length=600, store_rf_counts=False):
     """
     Calculates the damage equivalent load of a single data signal (or channel) 
     based on IEC TS 62600-3:2020 ED1. 4-point rainflow counting algorithm from 
@@ -261,9 +261,17 @@ def damage_equivalent_load(data_signal, m, bin_num=100, data_length=600):
     DELs = Srf**m * Nrf / data_length
     DEL = DELs.sum() ** (1/m)
 
-    return DEL
+    if store_rf_counts==True:
+        rf_counts = np.array([Nrf,Srf],np.float)
+        return DEL, rf_counts
+    else:
+        return DEL
+
 
     
+
+
+
 ################ plotting functions
 
 def plot_statistics(x,y_mean,y_max,y_min,y_stdev=[],xlabel=None,ylabel=None,title=None,savepath=None):
